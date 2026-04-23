@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>La Cuisine — AI Cooking Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #FAF7F2;
+    --ink: #1A1612;
+    --muted: #7A6F65;
+    --accent: #B85C38;
+    --accent-hover: #9E4D2E;
+    --accent-light: #F5E6DF;
+    --border: rgba(26,22,18,0.12);
+    --surface: #FFFFFF;
+    --tag-bg: #F0EBE3;
+    --sidebar-w: 240px;
+  }
+
+  html, body { height: 100%; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* API KEY SCREEN */
+  #apiScreen {
+    position: fixed; inset: 0;
+    background: var(--cream);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100;
+  }
+  .api-card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 18px;
+    padding: 40px 44px;
+    max-width: 460px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 4px 40px rgba(26,22,18,0.08);
+  }
+  .api-card .logo { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 500; margin-bottom: 8px; }
+  .api-card .logo span { color: var(--accent); font-style: italic; }
+  .free-badge {
+    display: inline-block; background: #E8F5E9; color: #2D7D46;
+    font-size: 11px; font-weight: 500; border-radius: 20px;
+    padding: 3px 12px; margin-bottom: 14px;
+  }
+  .api-card > p { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 18px; }
+  .steps {
+    background: var(--cream); border-radius: 12px;
+    padding: 14px 18px; text-align: left; margin-bottom: 20px;
+  }
+  .steps .steps-label { font-size: 11px; color: var(--muted); font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
+  .steps ol { padding-left: 18px; }
+  .steps li { font-size: 13px; color: var(--ink); line-height: 1.7; }
+  .steps a { color: var(--accent); text-decoration: none; }
+  .steps a:hover { text-decoration: underline; }
+  .api-card input {
+    width: 100%; font-family: 'DM Sans', sans-serif; font-size: 14px;
+    border: 0.5px solid var(--border); border-radius: 10px;
+    padding: 11px 14px; outline: none; color: var(--ink);
+    background: var(--cream); margin-bottom: 12px;
+    transition: border-color 0.15s;
+  }
+  .api-card input:focus { border-color: var(--accent); }
+  .api-card .primary-btn {
+    width: 100%; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+    background: var(--accent); color: white; border: none;
+    border-radius: 10px; padding: 11px; cursor: pointer;
+    transition: background 0.15s;
+  }
+  .api-card .primary-btn:hover { background: var(--accent-hover); }
+
+  /* HEADER */
+  header {
+    padding: 14px 20px;
+    border-bottom: 0.5px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--cream); flex-shrink: 0;
+  }
+  .logo { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 500; }
+  .logo span { color: var(--accent); font-style: italic; }
+  .header-right { display: flex; gap: 8px; }
+  .btn-ghost {
+    font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--muted);
+    background: none; border: 0.5px solid var(--border); border-radius: 20px;
+    padding: 5px 13px; cursor: pointer; transition: all 0.15s;
+  }
+  .btn-ghost:hover { background: var(--tag-bg); color: var(--ink); }
+
+  /* LAYOUT */
+  .layout { display: flex; flex: 1; min-height: 0; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: var(--sidebar-w); flex-shrink: 0;
+    border-right: 0.5px solid var(--border);
+    padding: 18px 14px;
+    display: flex; flex-direction: column; gap: 22px;
+    overflow-y: auto; background: var(--cream);
+  }
+  .sidebar-section h3 {
+    font-size: 10px; font-weight: 500; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 10px;
+  }
+  .pref-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+  .pref-tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--tag-bg); border-radius: 20px;
+    padding: 3px 10px; font-size: 12px; color: var(--ink);
+    cursor: pointer; transition: background 0.12s;
+  }
+  .pref-tag:hover { background: #E8E0D4; }
+  .pref-remove { font-size: 10px; color: var(--muted); }
+  .add-pref { display: flex; gap: 6px; }
+  .add-pref input {
+    flex: 1; font-family: 'DM Sans', sans-serif; font-size: 12px;
+    background: var(--surface); border: 0.5px solid var(--border);
+    border-radius: 8px; padding: 5px 9px; outline: none; color: var(--ink);
+    transition: border-color 0.15s;
+  }
+  .add-pref input:focus { border-color: var(--accent); }
+  .add-pref button {
+    font-size: 16px; background: var(--accent); color: white;
+    border: none; border-radius: 8px; width: 28px; cursor: pointer;
+  }
+  .quick-btn {
+    width: 100%; text-align: left; font-family: 'DM Sans', sans-serif;
+    font-size: 12px; color: var(--ink); background: none; border: none;
+    padding: 7px 8px; border-radius: 8px; cursor: pointer;
+    transition: background 0.12s; display: flex; align-items: center; gap: 8px;
+  }
+  .quick-btn:hover { background: var(--tag-bg); }
+  .quick-icon { width: 20px; text-align: center; font-size: 14px; flex-shrink: 0; }
+  .saved-recipe {
+    font-size: 12px; color: var(--muted); padding: 5px 8px;
+    border-radius: 8px; cursor: pointer; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis; transition: all 0.12s;
+  }
+  .saved-recipe:hover { background: var(--tag-bg); color: var(--ink); }
+  .no-saved { font-size: 11px; color: var(--muted); font-style: italic; padding: 2px 8px; }
+
+  /* MAIN */
+  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .mode-tabs {
+    display: flex; padding: 10px 16px 0;
+    border-bottom: 0.5px solid var(--border); flex-shrink: 0;
+  }
+  .mode-tab {
+    font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--muted);
+    background: none; border: none; padding: 6px 16px 10px;
+    cursor: pointer; border-bottom: 2px solid transparent;
+    margin-bottom: -0.5px; transition: all 0.15s;
+  }
+  .mode-tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 500; }
+  .mode-tab:hover:not(.active) { color: var(--ink); }
+
+  /* CHAT */
+  #chatPanel { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+  .chat-area {
+    flex: 1; overflow-y: auto; padding: 24px 20px;
+    display: flex; flex-direction: column; gap: 18px;
+  }
+  .welcome { text-align: center; padding: 40px 20px 20px; }
+  .welcome h2 {
+    font-family: 'Cormorant Garamond', serif; font-size: 30px;
+    font-weight: 400; color: var(--ink); margin-bottom: 10px;
+  }
+  .welcome p { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 20px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .chip {
+    font-size: 12px; background: var(--surface);
+    border: 0.5px solid var(--border); border-radius: 20px;
+    padding: 7px 15px; cursor: pointer; color: var(--ink); transition: all 0.12s;
+  }
+  .chip:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+
+  .msg { display: flex; gap: 10px; animation: fadeUp 0.2s ease; }
+  .msg.user { flex-direction: row-reverse; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+
+  .avatar {
+    width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-weight: 500;
+  }
+  .avatar.chef { background: var(--accent); color: white; font-family: 'Cormorant Garamond', serif; font-size: 15px; font-style: italic; }
+  .avatar.user-av { background: var(--tag-bg); color: var(--muted); font-size: 11px; }
+
+  .msg-wrap { display: flex; flex-direction: column; align-items: flex-start; max-width: 74%; }
+  .msg.user .msg-wrap { align-items: flex-end; }
+
+  .bubble {
+    padding: 11px 15px; border-radius: 14px;
+    font-size: 14px; line-height: 1.65; border: 0.5px solid var(--border);
+  }
+  .msg.assistant .bubble { background: var(--surface); border-radius: 4px 14px 14px 14px; }
+  .msg.user .bubble { background: var(--accent); color: white; border-color: transparent; border-radius: 14px 4px 14px 14px; font-size: 13px; }
+  .bubble h3 { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 500; color: var(--accent); margin-bottom: 8px; }
+  .bubble strong { font-weight: 500; }
+  .bubble ul, .bubble ol { padding-left: 18px; margin: 6px 0; }
+  .bubble li { margin: 3px 0; }
+  .bubble p + p { margin-top: 8px; }
+
+  .save-btn {
+    margin-top: 6px; font-family: 'DM Sans', sans-serif; font-size: 11px;
+    background: none; border: 0.5px solid var(--border);
+    border-radius: 20px; padding: 4px 12px; color: var(--muted);
+    cursor: pointer; transition: all 0.12s;
+  }
+  .save-btn:hover { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
+  .save-btn.saved { color: #2D7D46; border-color: #2D7D46; }
+
+  .typing { display: flex; align-items: center; gap: 3px; padding: 6px 2px; }
+  .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--muted); animation: pulse 1.2s ease-in-out infinite; }
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes pulse { 0%,80%,100%{opacity:0.3} 40%{opacity:1} }
+
+  .input-area {
+    padding: 12px 16px; border-top: 0.5px solid var(--border);
+    display: flex; gap: 8px; align-items: flex-end; flex-shrink: 0;
+  }
+  textarea {
+    flex: 1; font-family: 'DM Sans', sans-serif; font-size: 14px;
+    background: var(--surface); border: 0.5px solid var(--border);
+    border-radius: 12px; padding: 10px 14px; resize: none; outline: none;
+    color: var(--ink); max-height: 130px; line-height: 1.5;
+    transition: border-color 0.15s;
+  }
+  textarea:focus { border-color: var(--accent); }
+  textarea::placeholder { color: var(--muted); }
+  .send-btn {
+    width: 40px; height: 40px; background: var(--accent);
+    border: none; border-radius: 10px; color: white;
+    font-size: 16px; cursor: pointer; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s;
+  }
+  .send-btn:hover { background: var(--accent-hover); }
+  .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* PLANNER */
+  #plannerPanel { display: none; flex: 1; min-height: 0; overflow-y: auto; }
+  .planner-inner { padding: 24px; }
+  .planner-inner h2 { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 500; margin-bottom: 6px; }
+  .planner-inner .sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+  .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-bottom: 20px; }
+  .day-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 12px 10px; min-height: 120px; }
+  .day-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 8px; }
+  .meal-slot { font-size: 11px; color: var(--ink); padding: 4px 0; border-bottom: 0.5px solid var(--border); margin-bottom: 3px; cursor: pointer; transition: color 0.12s; }
+  .meal-slot:last-child { border-bottom: none; margin-bottom: 0; }
+  .meal-slot:hover { color: var(--accent); }
+  .meal-slot.empty { color: var(--muted); font-style: italic; cursor: default; }
+  .meal-slot.empty:hover { color: var(--muted); }
+  .planner-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .gen-btn {
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+    background: var(--accent); color: white; border: none;
+    border-radius: 10px; padding: 10px 20px; cursor: pointer; transition: background 0.15s;
+  }
+  .gen-btn:hover { background: var(--accent-hover); }
+  .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .plan-note { font-size: 12px; color: var(--muted); font-style: italic; }
+
+  @media (max-width: 700px) {
+    .sidebar { display: none; }
+    .week-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- API KEY SCREEN -->
+<div id="apiScreen">
+  <div class="api-card">
+    <div class="logo">La <span>Cuisine</span></div>
+    <div class="free-badge">✓ Completely free — no credit card needed</div>
+    <p>Powered by Google Gemini. Get your free API key in about a minute:</p>
+    <div class="steps">
+      <div class="steps-label">How to get your free key</div>
+      <ol>
+        <li>Go to <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a></li>
+        <li>Sign in with your Google account</li>
+        <li>Click <strong>Create API Key</strong> and copy it</li>
+        <li>Paste it below and you're in</li>
+      </ol>
+    </div>
+    <input type="password" id="apiKeyInput" placeholder="Paste your Gemini API key here..." />
+    <button class="primary-btn" onclick="saveKey()">Start Cooking →</button>
+  </div>
+</div>
+
+<!-- APP -->
+<header>
+  <div class="logo">La <span>Cuisine</span></div>
+  <div class="header-right">
+    <button class="btn-ghost" onclick="clearChat()">Clear chat</button>
+    <button class="btn-ghost" onclick="changeKey()">Change API key</button>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <h3>My Preferences</h3>
+      <div class="pref-tags" id="prefTags"></div>
+      <div class="add-pref">
+        <input type="text" id="prefInput" placeholder="e.g. no gluten..." />
+        <button onclick="addPref()">+</button>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <h3>Quick Actions</h3>
+      <button class="quick-btn" onclick="quickAsk('Give me a quick 20-minute weeknight dinner idea based on my preferences')">
+        <span class="quick-icon">⏱</span>Quick weeknight meal
+      </button>
+      <button class="quick-btn" onclick="quickAsk('Suggest an ambitious fine dining recipe I could make at home with professional plating tips')">
+        <span class="quick-icon">✦</span>Fine dining at home
+      </button>
+      <button class="quick-btn" onclick="quickAsk('What can I cook with chicken, garlic, and lemon? Give me 3 ideas at different skill levels')">
+        <span class="quick-icon">🥘</span>Fridge raid ideas
+      </button>
+      <button class="quick-btn" onclick="switchTab('planner', document.querySelectorAll(\'.mode-tab\')[1]); generatePlan()">
+        <span class="quick-icon">📋</span>Plan my week
+      </button>
+      <button class="quick-btn" onclick="quickAsk('Teach me a classic French sauce technique step by step')">
+        <span class="quick-icon">🎓</span>Learn a technique
+      </button>
+      <button class="quick-btn" onclick="quickAsk('Suggest a wine pairing based on my saved recipes and preferences')">
+        <span class="quick-icon">🍷</span>Wine pairing
+      </button>
+    </div>
+    <div class="sidebar-section">
+      <h3>Saved Recipes</h3>
+      <div id="savedList"><div class="no-saved">No saved recipes yet</div></div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="mode-tabs">
+      <button class="mode-tab active" onclick="switchTab('chat', this)">Chat</button>
+      <button class="mode-tab" onclick="switchTab('planner', this)">Meal Planner</button>
+    </div>
+
+    <div id="chatPanel">
+      <div class="chat-area" id="chatArea">
+        <div class="welcome" id="welcomeMsg">
+          <h2>Your personal chef, always in.</h2>
+          <p>Ask for recipes from quick weeknight dinners to Michelin-star techniques.<br/>I remember your preferences and help you plan every meal.</p>
+          <div class="chips">
+            <div class="chip" onclick="quickAsk('I need an impressive 3-course dinner party menu for 4 people')">Dinner party menu</div>
+            <div class="chip" onclick="quickAsk('Teach me how to make a perfect risotto from scratch')">Perfect risotto</div>
+            <div class="chip" onclick="quickAsk('What are some high-protein vegetarian meals I can meal prep?')">Vegetarian protein</div>
+            <div class="chip" onclick="quickAsk('How do I cook a restaurant-quality steak at home?')">Restaurant steak</div>
+            <div class="chip" onclick="quickAsk('Give me an easy no-bake dessert that looks impressive')">Easy dessert</div>
+            <div class="chip" onclick="quickAsk('What are some classic sauces every home cook should know?')">Essential sauces</div>
+          </div>
+        </div>
+      </div>
+      <div class="input-area">
+        <textarea id="msgInput" rows="1" placeholder="Ask for a recipe, technique, or meal plan idea..." onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+        <button class="send-btn" id="sendBtn" onclick="sendMessage()">&#10148;</button>
+      </div>
+    </div>
+
+    <div id="plannerPanel">
+      <div class="planner-inner">
+        <h2>Weekly Meal Planner</h2>
+        <p class="sub">AI-generated based on your preferences. Click any meal to get the full recipe in chat.</p>
+        <div class="week-grid" id="weekGrid"></div>
+        <div class="planner-actions">
+          <button class="gen-btn" id="genPlanBtn" onclick="generatePlan()">Generate AI Meal Plan</button>
+          <span class="plan-note">Tailored to your saved preferences</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const MEALS = ['Breakfast','Lunch','Dinner'];
+const MODEL = 'gemini-2.0-flash';
+
+let apiKey = localStorage.getItem('lc_gemini_key') || '';
+let messages = [];
+let preferences = JSON.parse(localStorage.getItem('lc_prefs') || '["No nuts","Loves Italian","Prefers fresh herbs"]');
+let savedRecipes = JSON.parse(localStorage.getItem('lc_saved') || '[]');
+let mealPlan = JSON.parse(localStorage.getItem('lc_plan') || '{}');
+let isLoading = false;
+
+function init() {
+  if (apiKey) document.getElementById('apiScreen').style.display = 'none';
+  renderPrefs(); renderSaved(); buildWeekGrid();
+}
+
+function saveKey() {
+  const val = document.getElementById('apiKeyInput').value.trim();
+  if (!val) { alert('Please paste your Gemini API key.'); return; }
+  apiKey = val;
+  localStorage.setItem('lc_gemini_key', apiKey);
+  document.getElementById('apiScreen').style.display = 'none';
+}
+
+function changeKey() {
+  localStorage.removeItem('lc_gemini_key');
+  apiKey = '';
+  document.getElementById('apiKeyInput').value = '';
+  document.getElementById('apiScreen').style.display = 'flex';
+}
+
+document.getElementById('apiKeyInput').addEventListener('keydown', e => { if (e.key === 'Enter') saveKey(); });
+
+function renderPrefs() {
+  document.getElementById('prefTags').innerHTML = preferences.map((p, i) =>
+    `<span class="pref-tag" onclick="removePref(${i})">${p} <span class="pref-remove">×</span></span>`
+  ).join('');
+  localStorage.setItem('lc_prefs', JSON.stringify(preferences));
+}
+
+function addPref() {
+  const input = document.getElementById('prefInput');
+  const val = input.value.trim();
+  if (val && !preferences.includes(val)) { preferences.push(val); input.value = ''; renderPrefs(); }
+}
+
+function removePref(i) { preferences.splice(i, 1); renderPrefs(); }
+document.getElementById('prefInput').addEventListener('keydown', e => { if (e.key === 'Enter') addPref(); });
+
+function renderSaved() {
+  const c = document.getElementById('savedList');
+  if (!savedRecipes.length) { c.innerHTML = '<div class="no-saved">No saved recipes yet</div>'; return; }
+  c.innerHTML = savedRecipes.map(r =>
+    `<div class="saved-recipe" onclick="quickAsk('Give me the full detailed recipe for ${r}')" title="${r}">📄 ${r}</div>`
+  ).join('');
+  localStorage.setItem('lc_saved', JSON.stringify(savedRecipes));
+}
+
+function saveRecipe(name) {
+  if (!savedRecipes.includes(name)) { savedRecipes.push(name); renderSaved(); }
+}
+
+function systemPrompt() {
+  return `You are La Cuisine, a warm and expert AI culinary assistant with the knowledge of a classically trained chef and passionate home cook. You help with everything from quick 20-minute weeknight dinners to elaborate fine dining recipes.\n\nUser's dietary preferences: ${preferences.length ? preferences.join(', ') : 'none specified'}\nUser's saved recipes: ${savedRecipes.length ? savedRecipes.join(', ') : 'none yet'}\n\nGuidelines:\n- Always consider the user's preferences\n- Format recipes with ### Recipe Name as the title, then ingredients list, then numbered steps\n- Be warm, encouraging, and passionate about food\n- When you provide a complete recipe, end with [SAVE: Recipe Name]\n- For fine dining requests: include plating tips, wine pairings, and professional techniques\n- Reference the user's preferences naturally in conversation`;
+}
+
+async function callGemini(userMsg, jsonMode) {
+  const history = messages.map(m => ({
+    role: m.role === 'assistant' ? 'model' : 'user',
+    parts: [{ text: m.content }]
+  }));
+
+  const body = {
+    system_instruction: { parts: [{ text: systemPrompt() }] },
+    contents: [...history, { role: 'user', parts: [{ text: userMsg }] }],
+    generationConfig: {
+      maxOutputTokens: 1500,
+      temperature: 0.8,
+      ...(jsonMode ? { responseMimeType: 'application/json' } : {})
+    }
+  };
+
+  const resp = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`,
+    { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
+  );
+
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err.error?.message || `API error ${resp.status}`);
+  }
+
+  const data = await resp.json();
+  return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+}
+
+function addMessage(role, content) {
+  const area = document.getElementById('chatArea');
+  document.getElementById('welcomeMsg')?.remove();
+
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+
+  const avatar = document.createElement('div');
+  avatar.className = `avatar ${role === 'assistant' ? 'chef' : 'user-av'}`;
+  avatar.textContent = role === 'assistant' ? 'C' : 'You';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.innerHTML = formatMessage(content);
+
+  const wrap = document.createElement('div');
+  wrap.className = 'msg-wrap';
+  wrap.appendChild(bubble);
+
+  if (role === 'assistant') {
+    const saveBtn = document.createElement('button');
+    saveBtn.className = 'save-btn';
+    saveBtn.textContent = '+ Save recipe';
+    saveBtn.onclick = () => {
+      const title = bubble.querySelector('h3')?.textContent?.trim() || 'Untitled Recipe';
+      saveRecipe(title);
+      saveBtn.textContent = '✓ Saved!';
+      saveBtn.classList.add('saved');
+    };
+    wrap.appendChild(saveBtn);
+  }
+
+  div.appendChild(avatar);
+  div.appendChild(wrap);
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+}
+
+function formatMessage(text) {
+  text = text.replace(/\[SAVE:[^\]]+\]/g, '');
+  text = text.replace(/### (.+)/g, '<h3>$1</h3>');
+  text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  text = text.replace(/^\d+\. (.+)/gm, '<li>$1</li>');
+  text = text.replace(/^[-*] (.+)/gm, '<li>$1</li>');
+  text = text.replace(/(<li>[\s\S]*?<\/li>)/g, m => `<ul>${m}</ul>`);
+  text = text.replace(/\n\n+/g, '</p><p>');
+  text = text.replace(/\n/g, '<br/>');
+  return `<p>${text}</p>`;
+}
+
+function showTyping() {
+  const area = document.getElementById('chatArea');
+  const div = document.createElement('div');
+  div.className = 'msg assistant'; div.id = 'typingIndicator';
+  const avatar = document.createElement('div');
+  avatar.className = 'avatar chef'; avatar.textContent = 'C';
+  const wrap = document.createElement('div'); wrap.className = 'msg-wrap';
+  const bubble = document.createElement('div'); bubble.className = 'bubble';
+  bubble.innerHTML = '<div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
+  wrap.appendChild(bubble); div.appendChild(avatar); div.appendChild(wrap);
+  area.appendChild(div); area.scrollTop = area.scrollHeight;
+}
+
+function removeTyping() { document.getElementById('typingIndicator')?.remove(); }
+
+async function sendMessage() {
+  const input = document.getElementById('msgInput');
+  const text = input.value.trim();
+  if (!text || isLoading) return;
+  if (!apiKey) { changeKey(); return; }
+
+  isLoading = true;
+  input.value = ''; input.style.height = 'auto';
+  document.getElementById('sendBtn').disabled = true;
+
+  messages.push({ role: 'user', content: text });
+  addMessage('user', text);
+  showTyping();
+
+  try {
+    const reply = await callGemini(text, false);
+    const saveMatch = reply.match(/\[SAVE: ([^\]]+)\]/);
+    if (saveMatch) saveRecipe(saveMatch[1]);
+    messages.push({ role: 'assistant', content: reply });
+    removeTyping();
+    addMessage('assistant', reply);
+  } catch (e) {
+    removeTyping();
+    const errDiv = document.createElement('div');
+    errDiv.className = 'msg assistant';
+    errDiv.innerHTML = `<div class="avatar chef">C</div><div class="msg-wrap"><div class="bubble" style="color:#B85C38;background:#FFF0EB;border-color:#F5E6DF;">Error: ${e.message}. Check your API key or try again.</div></div>`;
+    document.getElementById('chatArea').appendChild(errDiv);
+    messages.pop();
+  }
+
+  isLoading = false;
+  document.getElementById('sendBtn').disabled = false;
+}
+
+function quickAsk(text) {
+  if (document.getElementById('plannerPanel').style.display !== 'none') {
+    switchTab('chat', document.querySelector('.mode-tab'));
+  }
+  document.getElementById('msgInput').value = text;
+  sendMessage();
+}
+
+function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 130) + 'px';
+}
+
+function switchTab(tab, el) {
+  document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('chatPanel').style.display = tab === 'chat' ? 'flex' : 'none';
+  document.getElementById('plannerPanel').style.display = tab === 'planner' ? 'block' : 'none';
+}
+
+function clearChat() {
+  if (!confirm('Clear the chat history?')) return;
+  messages = [];
+  const area = document.getElementById('chatArea');
+  area.innerHTML = '';
+  const w = document.createElement('div');
+  w.className = 'welcome'; w.id = 'welcomeMsg';
+  w.innerHTML = `<h2>Your personal chef, always in.</h2><p>Ask for recipes from quick weeknight dinners to Michelin-star techniques.<br/>I remember your preferences and help you plan every meal.</p><div class="chips"><div class="chip" onclick="quickAsk('I need an impressive 3-course dinner party menu for 4 people')">Dinner party menu</div><div class="chip" onclick="quickAsk('Teach me how to make a perfect risotto from scratch')">Perfect risotto</div><div class="chip" onclick="quickAsk('What are some high-protein vegetarian meals I can meal prep?')">Vegetarian protein</div><div class="chip" onclick="quickAsk('How do I cook a restaurant-quality steak at home?')">Restaurant steak</div><div class="chip" onclick="quickAsk('Give me an easy no-bake dessert that looks impressive')">Easy dessert</div><div class="chip" onclick="quickAsk('What are some classic sauces every home cook should know?')">Essential sauces</div></div>`;
+  area.appendChild(w);
+}
+
+function buildWeekGrid() {
+  document.getElementById('weekGrid').innerHTML = DAYS.map(day => {
+    const dayMeals = mealPlan[day] || {};
+    return `<div class="day-card">
+      <div class="day-label">${day}</div>
+      ${MEALS.map(m => {
+        const meal = dayMeals[m];
+        return `<div class="meal-slot ${meal ? '' : 'empty'}" ${meal ? `onclick="quickAsk('Give me the full recipe for ${meal}')"` : ''}>${meal || m}</div>`;
+      }).join('')}
+    </div>`;
+  }).join('');
+}
+
+async function generatePlan() {
+  if (!apiKey) { changeKey(); return; }
+  const btn = document.getElementById('genPlanBtn');
+  btn.disabled = true; btn.textContent = 'Generating...';
+  try {
+    const prompt = `Create a 7-day meal plan with breakfast, lunch, and dinner. User preferences: ${preferences.join(', ')}. Return ONLY a valid JSON object, no markdown, no explanation. Format: {"Mon":{"Breakfast":"dish name","Lunch":"dish name","Dinner":"dish name"},"Tue":{...},...} covering Mon through Sun. Keep dish names short, 3-5 words.`;
+    const text = await callGemini(prompt, true);
+    const clean = text.replace(/```json|```/g, '').trim();
+    mealPlan = JSON.parse(clean);
+    localStorage.setItem('lc_plan', JSON.stringify(mealPlan));
+    buildWeekGrid();
+  } catch(e) {
+    alert('Could not generate meal plan. Please try again.');
+  }
+  btn.disabled = false; btn.textContent = 'Regenerate Plan';
+}
+
+init();
+</script>
+</body>
+</html>
