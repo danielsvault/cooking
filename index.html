@@ -9,23 +9,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --bg: #FDF6EE;
-    --surface: #FFFFFF;
-    --surface2: #F5EAD8;
-    --ink: #2C1A0A;
-    --muted: #9A7A5A;
-    --accent: #C4621A;
-    --accent-hover: #A8511A;
-    --accent-light: #FAE8D4;
-    --gold: #C49A28;
-    --gold-light: #FBF0D0;
-    --border: rgba(185,90,30,0.14);
-    --gold-border: rgba(196,154,40,0.25);
+    --bg: #FDF6EE; --surface: #FFFFFF; --ink: #2C1A0A; --muted: #9A7A5A;
+    --accent: #C4621A; --accent-hover: #A8511A; --accent-light: #FAE8D4;
+    --gold: #C49A28; --gold-light: #FBF0D0;
+    --border: rgba(185,90,30,0.14); --gold-border: rgba(196,154,40,0.25);
     --sidebar-w: 220px;
   }
-
   html, body { height: 100%; }
   body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 
@@ -49,7 +39,7 @@
   header { padding: 12px 20px; border-bottom: 0.5px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--bg); flex-shrink: 0; }
   .logo { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 500; color: var(--ink); display: flex; align-items: center; gap: 8px; }
   .logo span { color: var(--accent); font-style: italic; }
-  .logo-gold { color: var(--gold); font-size: 14px; font-style: normal; }
+  .logo-gold { color: var(--gold); font-size: 14px; }
   .header-right { display: flex; gap: 8px; }
   .btn-ghost { font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--muted); background: none; border: 0.5px solid var(--border); border-radius: 20px; padding: 5px 13px; cursor: pointer; transition: all 0.15s; }
   .btn-ghost:hover { background: var(--accent-light); color: var(--accent); }
@@ -65,7 +55,7 @@
   .add-pref { display: flex; gap: 6px; }
   .add-pref input { flex: 1; font-family: 'DM Sans', sans-serif; font-size: 12px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 8px; padding: 5px 9px; outline: none; color: var(--ink); transition: border-color 0.15s; }
   .add-pref input:focus { border-color: var(--accent); }
-  .add-pref button { font-size: 16px; background: var(--accent); color: white; border: none; border-radius: 8px; width: 28px; cursor: pointer; transition: background 0.15s; }
+  .add-pref button { font-size: 16px; background: var(--accent); color: white; border: none; border-radius: 8px; width: 28px; cursor: pointer; }
   .add-pref button:hover { background: var(--accent-hover); }
   .quick-btn { width: 100%; text-align: left; font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--ink); background: none; border: none; padding: 7px 8px; border-radius: 8px; cursor: pointer; transition: background 0.12s; display: flex; align-items: center; gap: 8px; }
   .quick-btn:hover { background: var(--accent-light); }
@@ -202,12 +192,12 @@
   <div class="api-card">
     <div class="logo">Pumpkin <span>Spice</span></div>
     <div class="cost-badge">✦ Powered by Anthropic Claude</div>
-    <p>Enter your Anthropic API key to get started. Your key is stored only in your browser and sent directly to Anthropic — never anywhere else.</p>
+    <p>Enter your Anthropic API key to get started. Stored only in your browser.</p>
     <div class="steps">
       <div class="steps-label">How to get your key</div>
       <ol>
         <li>Go to <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></li>
-        <li>Sign up and add $5 in credits (lasts months with casual use)</li>
+        <li>Sign up and add $5 in credits</li>
         <li>Click <strong>API Keys → Create Key</strong> and copy it</li>
         <li>Paste it below</li>
       </ol>
@@ -413,6 +403,7 @@
 </div>
 
 <script>
+const PROXY = 'https://pslproxy.daniel-wang1291.workers.dev';
 const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const MEALS = ['Breakfast','Lunch','Dinner'];
 const MODEL = 'claude-sonnet-4-20250514';
@@ -463,48 +454,46 @@ function getProfile() {
 function buildSystemPrompt() {
   const p = getProfile();
   const qp = quickPrefs.length ? quickPrefs.join(', ') : '';
-  const recipes = myRecipes.length ? myRecipes.map(r => r.name + (r.cuisine ? ` (${r.cuisine})` : '')).join(', ') : '';
-  let prompt = `You are Pumpkin Spice, a warm, expert, and passionate AI culinary assistant with the knowledge of a classically trained chef. You help with everything from quick weeknight dinners to elaborate fine dining at home.\n\n`;
-  if (p.allergies) prompt += `ALLERGIES & RESTRICTIONS — never include these under any circumstances: ${p.allergies}\n`;
-  if (p.cuisines) prompt += `Favourite cuisines: ${p.cuisines}\n`;
-  if (p.skill) prompt += `Cooking skill level: ${p.skill}\n`;
-  if (p.equipment) prompt += `Kitchen equipment: ${p.equipment}\n`;
-  if (p.flavour) prompt += `Flavour profile: ${p.flavour}\n`;
-  if (p.goals) prompt += `Cooking goals: ${p.goals}\n`;
-  if (p.notes) prompt += `Additional context: ${p.notes}\n`;
-  if (qp) prompt += `Quick notes: ${qp}\n`;
-  if (recipes) prompt += `User's recipe catalogue: ${recipes}\n`;
-  if (p.doc) prompt += `\nDetailed preferences from uploaded document:\n${p.doc}\n`;
-  prompt += `\nGuidelines:\n- Always respect allergies and restrictions absolutely\n- Tailor every response to the user's skill level, equipment, and preferences\n- Format recipes with ### Recipe Name, then ingredients, then numbered steps\n- Be warm, encouraging, and genuinely passionate about food\n- When providing a complete recipe, end with [SAVE: Recipe Name]\n- For fine dining requests: include plating tips, wine pairings, professional techniques`;
+  const recipes = myRecipes.length ? myRecipes.map(r => r.name + (r.cuisine ? ' (' + r.cuisine + ')' : '')).join(', ') : '';
+  let prompt = 'You are Pumpkin Spice, a warm, expert, and passionate AI culinary assistant with the knowledge of a classically trained chef. You help with everything from quick weeknight dinners to elaborate fine dining at home.\n\n';
+  if (p.allergies) prompt += 'ALLERGIES & RESTRICTIONS — never include these under any circumstances: ' + p.allergies + '\n';
+  if (p.cuisines) prompt += 'Favourite cuisines: ' + p.cuisines + '\n';
+  if (p.skill) prompt += 'Cooking skill level: ' + p.skill + '\n';
+  if (p.equipment) prompt += 'Kitchen equipment: ' + p.equipment + '\n';
+  if (p.flavour) prompt += 'Flavour profile: ' + p.flavour + '\n';
+  if (p.goals) prompt += 'Cooking goals: ' + p.goals + '\n';
+  if (p.notes) prompt += 'Additional context: ' + p.notes + '\n';
+  if (qp) prompt += 'Quick notes: ' + qp + '\n';
+  if (recipes) prompt += 'Recipe catalogue: ' + recipes + '\n';
+  if (p.doc) prompt += '\nDetailed preferences from uploaded document:\n' + p.doc + '\n';
+  prompt += '\nGuidelines:\n- Always respect allergies absolutely\n- Tailor responses to skill level, equipment, and preferences\n- Format recipes with ### Recipe Name, then ingredients, then numbered steps\n- Be warm, encouraging, and passionate about food\n- When providing a complete recipe, end with [SAVE: Recipe Name]\n- For fine dining: include plating tips, wine pairings, professional techniques';
   return prompt;
 }
 
-async function callAnthropic(userMsg, jsonMode) {
+async function callAPI(userMsg) {
   const history = messages.map(m => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: m.content }));
-  const body = {
-    model: MODEL,
-    max_tokens: 1500,
-    system: buildSystemPrompt(),
-    messages: [...history, { role: 'user', content: userMsg }]
-  };
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+  const resp = await fetch(PROXY, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-calls': 'true'
+      'anthropic-version': '2023-06-01'
     },
-    body: JSON.stringify(body)
+    body: JSON.stringify({
+      model: MODEL,
+      max_tokens: 1500,
+      system: buildSystemPrompt(),
+      messages: [...history, { role: 'user', content: userMsg }]
+    })
   });
-  if (!resp.ok) { const err = await resp.json().catch(() => ({})); throw new Error(err.error?.message || `API error ${resp.status}`); }
+  if (!resp.ok) { const err = await resp.json().catch(() => ({})); throw new Error(err.error?.message || 'API error ' + resp.status); }
   const data = await resp.json();
   return data.content?.[0]?.text || '';
 }
 
 function renderPrefs() {
   document.getElementById('prefTags').innerHTML = quickPrefs.map((p, i) =>
-    `<span class="pref-tag" onclick="removePref(${i})">${p} <span class="pref-remove">×</span></span>`
+    '<span class="pref-tag" onclick="removePref(' + i + ')">' + p + ' <span class="pref-remove">x</span></span>'
   ).join('');
   localStorage.setItem('ps_prefs', JSON.stringify(quickPrefs));
 }
@@ -519,16 +508,16 @@ document.getElementById('prefInput').addEventListener('keydown', e => { if (e.ke
 function renderSaved() {
   const c = document.getElementById('savedList');
   if (!savedRecipeNames.length) { c.innerHTML = '<div class="no-saved">No saved recipes yet</div>'; return; }
-  c.innerHTML = savedRecipeNames.map(r => `<div class="saved-recipe" onclick="quickAsk('Give me the full detailed recipe for ${r}')" title="${r}">✦ ${r}</div>`).join('');
+  c.innerHTML = savedRecipeNames.map(r => '<div class="saved-recipe" onclick="quickAsk(\'Give me the full detailed recipe for ' + r + '\')" title="' + r + '">✦ ' + r + '</div>').join('');
   localStorage.setItem('ps_saved_names', JSON.stringify(savedRecipeNames));
 }
 function saveRecipeName(name) { if (!savedRecipeNames.includes(name)) { savedRecipeNames.push(name); renderSaved(); } }
 
 function addMessage(role, content) {
   const area = document.getElementById('chatArea');
-  document.getElementById('welcomeMsg')?.remove();
-  const div = document.createElement('div'); div.className = `msg ${role}`;
-  const avatar = document.createElement('div'); avatar.className = `avatar ${role === 'assistant' ? 'chef' : 'user-av'}`;
+  document.getElementById('welcomeMsg') && document.getElementById('welcomeMsg').remove();
+  const div = document.createElement('div'); div.className = 'msg ' + role;
+  const avatar = document.createElement('div'); avatar.className = 'avatar ' + (role === 'assistant' ? 'chef' : 'user-av');
   avatar.textContent = role === 'assistant' ? 'P' : 'You';
   const bubble = document.createElement('div'); bubble.className = 'bubble';
   bubble.innerHTML = formatMessage(content);
@@ -536,8 +525,8 @@ function addMessage(role, content) {
   wrap.appendChild(bubble);
   if (role === 'assistant') {
     const saveBtn = document.createElement('button'); saveBtn.className = 'save-btn'; saveBtn.textContent = '+ Save recipe';
-    saveBtn.onclick = () => {
-      const title = bubble.querySelector('h3')?.textContent?.trim() || 'Untitled Recipe';
+    saveBtn.onclick = function() {
+      const title = bubble.querySelector('h3') ? bubble.querySelector('h3').textContent.trim() : 'Untitled Recipe';
       saveRecipeName(title); saveBtn.textContent = '✓ Saved!'; saveBtn.classList.add('saved');
     };
     wrap.appendChild(saveBtn);
@@ -552,10 +541,10 @@ function formatMessage(text) {
   text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
   text = text.replace(/^\d+\. (.+)/gm, '<li>$1</li>');
   text = text.replace(/^[-*] (.+)/gm, '<li>$1</li>');
-  text = text.replace(/(<li>[\s\S]*?<\/li>)/g, m => `<ul>${m}</ul>`);
+  text = text.replace(/(<li>[\s\S]*?<\/li>)/g, function(m) { return '<ul>' + m + '</ul>'; });
   text = text.replace(/\n\n+/g, '</p><p>');
   text = text.replace(/\n/g, '<br/>');
-  return `<p>${text}</p>`;
+  return '<p>' + text + '</p>';
 }
 
 function showTyping() {
@@ -568,7 +557,7 @@ function showTyping() {
   wrap.appendChild(bubble); div.appendChild(avatar); div.appendChild(wrap);
   area.appendChild(div); area.scrollTop = area.scrollHeight;
 }
-function removeTyping() { document.getElementById('typingIndicator')?.remove(); }
+function removeTyping() { const t = document.getElementById('typingIndicator'); if (t) t.remove(); }
 
 async function sendMessage() {
   const input = document.getElementById('msgInput');
@@ -580,7 +569,7 @@ async function sendMessage() {
   messages.push({ role: 'user', content: text });
   addMessage('user', text); showTyping();
   try {
-    const reply = await callAnthropic(text, false);
+    const reply = await callAPI(text);
     const saveMatch = reply.match(/\[SAVE: ([^\]]+)\]/);
     if (saveMatch) saveRecipeName(saveMatch[1]);
     messages.push({ role: 'assistant', content: reply });
@@ -588,7 +577,7 @@ async function sendMessage() {
   } catch(e) {
     removeTyping();
     const errDiv = document.createElement('div'); errDiv.className = 'msg assistant';
-    errDiv.innerHTML = `<div class="avatar chef">P</div><div class="msg-wrap"><div class="bubble" style="color:var(--accent);background:#FFF5EE;border-color:var(--accent-light);">Error: ${e.message}</div></div>`;
+    errDiv.innerHTML = '<div class="avatar chef">P</div><div class="msg-wrap"><div class="bubble" style="color:var(--accent);background:#FFF5EE;border-color:var(--accent-light);">Error: ' + e.message + '</div></div>';
     document.getElementById('chatArea').appendChild(errDiv); messages.pop();
   }
   isLoading = false; document.getElementById('sendBtn').disabled = false;
@@ -607,21 +596,24 @@ function clearChat() {
   messages = [];
   const area = document.getElementById('chatArea'); area.innerHTML = '';
   const w = document.createElement('div'); w.className = 'welcome'; w.id = 'welcomeMsg';
-  w.innerHTML = `<h2>Pumpkin <span style="color:var(--accent);font-style:italic;">Spice</span></h2><div class="gold-line"></div><div class="chips"><div class="chip chip-orange" onclick="quickAsk('I need an impressive 3-course dinner party menu for 4 people')">Dinner party menu</div><div class="chip chip-gold" onclick="quickAsk('Teach me how to make a perfect risotto from scratch')">Perfect risotto</div><div class="chip chip-orange" onclick="quickAsk('How do I cook a restaurant-quality steak at home?')">Restaurant steak</div><div class="chip chip-gold" onclick="quickAsk('Give me an easy no-bake dessert that looks impressive')">Easy dessert</div><div class="chip chip-orange" onclick="quickAsk('What are some classic sauces every home cook should know?')">Essential sauces</div><div class="chip chip-gold" onclick="quickAsk('Suggest a seasonal recipe using autumn ingredients')">Seasonal recipe</div></div>`;
+  w.innerHTML = '<h2>Pumpkin <span style="color:var(--accent);font-style:italic;">Spice</span></h2><div class="gold-line"></div><div class="chips"><div class="chip chip-orange" onclick="quickAsk(\'I need an impressive 3-course dinner party menu for 4 people\')">Dinner party menu</div><div class="chip chip-gold" onclick="quickAsk(\'Teach me how to make a perfect risotto from scratch\')">Perfect risotto</div><div class="chip chip-orange" onclick="quickAsk(\'How do I cook a restaurant-quality steak at home?\')">Restaurant steak</div><div class="chip chip-gold" onclick="quickAsk(\'Give me an easy no-bake dessert that looks impressive\')">Easy dessert</div><div class="chip chip-orange" onclick="quickAsk(\'What are some classic sauces every home cook should know?\')">Essential sauces</div><div class="chip chip-gold" onclick="quickAsk(\'Suggest a seasonal recipe using autumn ingredients\')">Seasonal recipe</div></div>';
   area.appendChild(w);
 }
 
 function switchTab(tab) {
-  document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.getElementById(`tab-${tab}`).classList.add('active');
-  document.getElementById(`panel-${tab}`).classList.add('active');
+  document.querySelectorAll('.mode-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
 }
 
 function buildWeekGrid() {
-  document.getElementById('weekGrid').innerHTML = DAYS.map(day => {
+  document.getElementById('weekGrid').innerHTML = DAYS.map(function(day) {
     const dayMeals = mealPlan[day] || {};
-    return `<div class="day-card"><div class="day-label">${day}</div>${MEALS.map(m => { const meal = dayMeals[m]; return `<div class="meal-slot ${meal ? '' : 'empty'}" ${meal ? `onclick="quickAsk('Give me the full recipe for ${meal}')"` : ''}>${meal || m}</div>`; }).join('')}</div>`;
+    return '<div class="day-card"><div class="day-label">' + day + '</div>' + MEALS.map(function(m) {
+      const meal = dayMeals[m];
+      return '<div class="meal-slot ' + (meal ? '' : 'empty') + '" ' + (meal ? 'onclick="quickAsk(\'Give me the full recipe for ' + meal + '\')"' : '') + '>' + (meal || m) + '</div>';
+    }).join('') + '</div>';
   }).join('');
 }
 
@@ -630,8 +622,8 @@ async function generatePlan() {
   const btn = document.getElementById('genPlanBtn'); btn.disabled = true; btn.textContent = 'Generating...';
   try {
     const p = getProfile();
-    const prompt = `Create a 7-day meal plan with breakfast, lunch, and dinner. ${p.allergies ? 'NEVER include: ' + p.allergies + '.' : ''} Favourite cuisines: ${p.cuisines || 'varied'}. Skill level: ${p.skill || 'home cook'}. Respond with ONLY a valid JSON object, no explanation or markdown. Format exactly: {"Mon":{"Breakfast":"dish name","Lunch":"dish name","Dinner":"dish name"},"Tue":{...},...} for Mon through Sun. Keep dish names short, 3-5 words.`;
-    const text = await callAnthropic(prompt, true);
+    const prompt = 'Create a 7-day meal plan with breakfast, lunch, and dinner.' + (p.allergies ? ' NEVER include: ' + p.allergies + '.' : '') + ' Favourite cuisines: ' + (p.cuisines || 'varied') + '. Skill level: ' + (p.skill || 'home cook') + '. Respond with ONLY a valid JSON object, no explanation or markdown. Format: {"Mon":{"Breakfast":"dish name","Lunch":"dish name","Dinner":"dish name"},...} for Mon through Sun. Short dish names, 3-5 words.';
+    const text = await callAPI(prompt);
     const clean = text.replace(/```json|```/g, '').trim();
     const jsonMatch = clean.match(/\{[\s\S]*\}/);
     if (jsonMatch) { mealPlan = JSON.parse(jsonMatch[0]); localStorage.setItem('ps_plan', JSON.stringify(mealPlan)); buildWeekGrid(); }
@@ -642,22 +634,20 @@ async function generatePlan() {
 function renderRecipeGrid() {
   const grid = document.getElementById('recipeGrid');
   if (!myRecipes.length) { grid.innerHTML = '<div class="no-recipes">No recipes yet — add your first one above, or save one from chat!</div>'; return; }
-  grid.innerHTML = myRecipes.map((r, i) => `
-    <div class="recipe-card" onclick="quickAsk('Tell me more about this recipe and suggest variations: ${r.name}. Ingredients: ${r.ingredients || 'not specified'}. Notes: ${r.notes || 'none'}')">
-      <h4>${r.name}</h4>
-      ${r.cuisine ? `<div class="rc-cuisine">✦ ${r.cuisine}</div>` : ''}
-      ${r.notes ? `<div class="rc-notes">${r.notes.substring(0, 80)}${r.notes.length > 80 ? '...' : ''}</div>` : ''}
-      <div class="rc-footer">
-        <span class="rc-tag">${r.cuisine || 'Recipe'}</span>
-        <button class="rc-delete" onclick="event.stopPropagation(); deleteRecipe(${i})">Remove</button>
-      </div>
-    </div>`).join('');
+  grid.innerHTML = myRecipes.map(function(r, i) {
+    return '<div class="recipe-card" onclick="quickAsk(\'Tell me more about this recipe and suggest variations: ' + r.name + '. Ingredients: ' + (r.ingredients || 'not specified') + '. Notes: ' + (r.notes || 'none') + '\')">' +
+      '<h4>' + r.name + '</h4>' +
+      (r.cuisine ? '<div class="rc-cuisine">✦ ' + r.cuisine + '</div>' : '') +
+      (r.notes ? '<div class="rc-notes">' + r.notes.substring(0, 80) + (r.notes.length > 80 ? '...' : '') + '</div>' : '') +
+      '<div class="rc-footer"><span class="rc-tag">' + (r.cuisine || 'Recipe') + '</span>' +
+      '<button class="rc-delete" onclick="event.stopPropagation(); deleteRecipe(' + i + ')">Remove</button></div></div>';
+  }).join('');
 }
 
 function saveNewRecipe() {
   const name = document.getElementById('rName').value.trim();
   if (!name) { alert('Please enter a recipe name.'); return; }
-  myRecipes.push({ name, cuisine: document.getElementById('rCuisine').value.trim(), ingredients: document.getElementById('rIngredients').value.trim(), notes: document.getElementById('rNotes').value.trim() });
+  myRecipes.push({ name: name, cuisine: document.getElementById('rCuisine').value.trim(), ingredients: document.getElementById('rIngredients').value.trim(), notes: document.getElementById('rNotes').value.trim() });
   localStorage.setItem('ps_my_recipes', JSON.stringify(myRecipes));
   document.getElementById('rName').value = ''; document.getElementById('rCuisine').value = '';
   document.getElementById('rIngredients').value = ''; document.getElementById('rNotes').value = '';
@@ -692,11 +682,15 @@ function saveProfile() {
   localStorage.setItem('ps_skill', skillLevel);
   const btn = document.getElementById('saveProfileBtn');
   btn.textContent = '✓ Saved!'; btn.style.background = '#5A8A2A';
-  setTimeout(() => { btn.textContent = 'Save Profile'; btn.style.background = ''; }, 2000);
+  setTimeout(function() { btn.textContent = 'Save Profile'; btn.style.background = ''; }, 2000);
 }
 
 function setSkill(level) { skillLevel = level; renderSkillBtns(); }
-function renderSkillBtns() { document.querySelectorAll('.skill-btn').forEach(btn => { btn.classList.toggle('active', btn.textContent === skillLevel); }); }
+function renderSkillBtns() {
+  document.querySelectorAll('.skill-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.textContent === skillLevel);
+  });
+}
 
 function handleFileSelect(e) { const file = e.target.files[0]; if (file) readFile(file); }
 function handleDragOver(e) { e.preventDefault(); document.getElementById('uploadZone').classList.add('dragover'); }
@@ -706,7 +700,7 @@ function handleDrop(e) { e.preventDefault(); document.getElementById('uploadZone
 function readFile(file) {
   if (!file.name.endsWith('.txt')) { alert('Please upload a .txt file.'); return; }
   const reader = new FileReader();
-  reader.onload = (e) => {
+  reader.onload = function(e) {
     uploadedDocContent = e.target.result; uploadedDocName = file.name;
     localStorage.setItem('ps_doc_content', uploadedDocContent);
     localStorage.setItem('ps_doc_name', uploadedDocName);
@@ -718,7 +712,7 @@ function readFile(file) {
 function renderUploadedDocs() {
   const c = document.getElementById('uploadedDocs');
   if (!uploadedDocName) { c.innerHTML = ''; return; }
-  c.innerHTML = `<div class="uploaded-doc"><span>📄 ${uploadedDocName} — loaded into your profile</span><button onclick="removeDoc()">×</button></div>`;
+  c.innerHTML = '<div class="uploaded-doc"><span>📄 ' + uploadedDocName + ' — loaded into your profile</span><button onclick="removeDoc()">×</button></div>';
 }
 
 function removeDoc() {
