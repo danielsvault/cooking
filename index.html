@@ -27,36 +27,13 @@
   }
 
   html, body { height: 100%; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--ink);
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    overflow: hidden;
-  }
-
-  /* API SCREEN */
-  #apiScreen {
-    position: fixed; inset: 0;
-    background: var(--bg);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 100;
-  }
-  .api-card {
-    background: var(--surface);
-    border: 0.5px solid var(--border);
-    border-radius: 18px;
-    padding: 40px 44px;
-    max-width: 460px; width: 90%;
-    text-align: center;
-    box-shadow: 0 4px 40px rgba(196,98,26,0.08);
-  }
+  #apiScreen { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 100; }
+  .api-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 18px; padding: 40px 44px; max-width: 460px; width: 90%; text-align: center; box-shadow: 0 4px 40px rgba(196,98,26,0.08); }
   .api-card .logo { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 500; margin-bottom: 8px; color: var(--ink); }
   .api-card .logo span { color: var(--accent); font-style: italic; }
-  .free-badge { display: inline-block; background: #FBF0D0; color: var(--gold); font-size: 11px; font-weight: 500; border-radius: 20px; padding: 3px 12px; margin-bottom: 14px; }
+  .cost-badge { display: inline-block; background: var(--gold-light); color: var(--gold); font-size: 11px; font-weight: 500; border-radius: 20px; padding: 3px 12px; margin-bottom: 14px; }
   .api-card > p { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 18px; }
   .steps { background: var(--bg); border-radius: 12px; padding: 14px 18px; text-align: left; margin-bottom: 20px; }
   .steps-label { font-size: 11px; color: var(--muted); font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
@@ -64,122 +41,54 @@
   .steps li { font-size: 13px; color: var(--ink); line-height: 1.7; }
   .steps a { color: var(--accent); text-decoration: none; }
   .steps a:hover { text-decoration: underline; }
-  .api-card input {
-    width: 100%; font-family: 'DM Sans', sans-serif; font-size: 14px;
-    border: 0.5px solid var(--border); border-radius: 10px;
-    padding: 11px 14px; outline: none; color: var(--ink);
-    background: var(--bg); margin-bottom: 12px; transition: border-color 0.15s;
-  }
+  .api-card input { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 14px; border: 0.5px solid var(--border); border-radius: 10px; padding: 11px 14px; outline: none; color: var(--ink); background: var(--bg); margin-bottom: 12px; transition: border-color 0.15s; }
   .api-card input:focus { border-color: var(--accent); }
-  .primary-btn {
-    width: 100%; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
-    background: var(--accent); color: white; border: none;
-    border-radius: 10px; padding: 11px; cursor: pointer; transition: background 0.15s;
-  }
+  .primary-btn { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; background: var(--accent); color: white; border: none; border-radius: 10px; padding: 11px; cursor: pointer; transition: background 0.15s; }
   .primary-btn:hover { background: var(--accent-hover); }
 
-  /* HEADER */
-  header {
-    padding: 12px 20px;
-    border-bottom: 0.5px solid var(--border);
-    display: flex; align-items: center; justify-content: space-between;
-    background: var(--bg); flex-shrink: 0;
-  }
+  header { padding: 12px 20px; border-bottom: 0.5px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--bg); flex-shrink: 0; }
   .logo { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 500; color: var(--ink); display: flex; align-items: center; gap: 8px; }
   .logo span { color: var(--accent); font-style: italic; }
   .logo-gold { color: var(--gold); font-size: 14px; font-style: normal; }
   .header-right { display: flex; gap: 8px; }
-  .btn-ghost {
-    font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--muted);
-    background: none; border: 0.5px solid var(--border); border-radius: 20px;
-    padding: 5px 13px; cursor: pointer; transition: all 0.15s;
-  }
+  .btn-ghost { font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--muted); background: none; border: 0.5px solid var(--border); border-radius: 20px; padding: 5px 13px; cursor: pointer; transition: all 0.15s; }
   .btn-ghost:hover { background: var(--accent-light); color: var(--accent); }
 
-  /* LAYOUT */
   .layout { display: flex; flex: 1; min-height: 0; }
 
-  /* SIDEBAR */
-  .sidebar {
-    width: var(--sidebar-w); flex-shrink: 0;
-    border-right: 0.5px solid var(--border);
-    padding: 16px 14px;
-    display: flex; flex-direction: column; gap: 20px;
-    overflow-y: auto; background: var(--bg);
-  }
-  .sidebar-section h3 {
-    font-size: 10px; font-weight: 500; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--muted); margin-bottom: 10px;
-  }
+  .sidebar { width: var(--sidebar-w); flex-shrink: 0; border-right: 0.5px solid var(--border); padding: 16px 14px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; background: var(--bg); }
+  .sidebar-section h3 { font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
   .pref-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
-  .pref-tag {
-    display: inline-flex; align-items: center; gap: 4px;
-    background: var(--accent-light); border-radius: 20px;
-    padding: 3px 10px; font-size: 12px; color: var(--accent);
-    cursor: pointer; transition: background 0.12s;
-  }
+  .pref-tag { display: inline-flex; align-items: center; gap: 4px; background: var(--accent-light); border-radius: 20px; padding: 3px 10px; font-size: 12px; color: var(--accent); cursor: pointer; transition: background 0.12s; }
   .pref-tag:hover { background: #F5D8B8; }
-  .pref-remove { font-size: 10px; color: var(--accent); opacity: 0.6; }
+  .pref-remove { font-size: 10px; opacity: 0.6; }
   .add-pref { display: flex; gap: 6px; }
-  .add-pref input {
-    flex: 1; font-family: 'DM Sans', sans-serif; font-size: 12px;
-    background: var(--surface); border: 0.5px solid var(--border);
-    border-radius: 8px; padding: 5px 9px; outline: none; color: var(--ink);
-    transition: border-color 0.15s;
-  }
+  .add-pref input { flex: 1; font-family: 'DM Sans', sans-serif; font-size: 12px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 8px; padding: 5px 9px; outline: none; color: var(--ink); transition: border-color 0.15s; }
   .add-pref input:focus { border-color: var(--accent); }
-  .add-pref button {
-    font-size: 16px; background: var(--accent); color: white;
-    border: none; border-radius: 8px; width: 28px; cursor: pointer; transition: background 0.15s;
-  }
+  .add-pref button { font-size: 16px; background: var(--accent); color: white; border: none; border-radius: 8px; width: 28px; cursor: pointer; transition: background 0.15s; }
   .add-pref button:hover { background: var(--accent-hover); }
-  .quick-btn {
-    width: 100%; text-align: left; font-family: 'DM Sans', sans-serif;
-    font-size: 12px; color: var(--ink); background: none; border: none;
-    padding: 7px 8px; border-radius: 8px; cursor: pointer;
-    transition: background 0.12s; display: flex; align-items: center; gap: 8px;
-  }
+  .quick-btn { width: 100%; text-align: left; font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--ink); background: none; border: none; padding: 7px 8px; border-radius: 8px; cursor: pointer; transition: background 0.12s; display: flex; align-items: center; gap: 8px; }
   .quick-btn:hover { background: var(--accent-light); }
   .quick-icon { width: 20px; text-align: center; font-size: 14px; flex-shrink: 0; }
-  .saved-recipe {
-    font-size: 12px; color: var(--muted); padding: 5px 8px;
-    border-radius: 8px; cursor: pointer; white-space: nowrap;
-    overflow: hidden; text-overflow: ellipsis; transition: all 0.12s;
-  }
+  .saved-recipe { font-size: 12px; color: var(--muted); padding: 5px 8px; border-radius: 8px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: all 0.12s; }
   .saved-recipe:hover { background: var(--accent-light); color: var(--accent); }
   .no-saved { font-size: 11px; color: var(--muted); font-style: italic; padding: 2px 8px; }
 
-  /* MAIN */
   .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-  .mode-tabs {
-    display: flex; padding: 10px 16px 0;
-    border-bottom: 0.5px solid var(--border); flex-shrink: 0; gap: 4px;
-  }
-  .mode-tab {
-    font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--muted);
-    background: none; border: none; padding: 6px 14px 10px;
-    cursor: pointer; border-bottom: 2px solid transparent;
-    margin-bottom: -0.5px; transition: all 0.15s;
-  }
+  .mode-tabs { display: flex; padding: 10px 16px 0; border-bottom: 0.5px solid var(--border); flex-shrink: 0; gap: 4px; }
+  .mode-tab { font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--muted); background: none; border: none; padding: 6px 14px 10px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -0.5px; transition: all 0.15s; }
   .mode-tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 500; }
   .mode-tab:hover:not(.active) { color: var(--ink); }
 
-  /* PANELS */
   .panel { display: none; flex: 1; flex-direction: column; min-height: 0; }
   .panel.active { display: flex; }
 
-  /* CHAT */
-  .chat-area {
-    flex: 1; overflow-y: auto; padding: 24px 20px;
-    display: flex; flex-direction: column; gap: 18px;
-  }
+  .chat-area { flex: 1; overflow-y: auto; padding: 24px 20px; display: flex; flex-direction: column; gap: 18px; }
   .welcome { text-align: center; padding: 50px 20px 20px; }
   .welcome h2 { font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 400; color: var(--ink); margin-bottom: 20px; }
   .gold-line { width: 60px; height: 1px; background: var(--gold); margin: 0 auto 20px; opacity: 0.6; }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-  .chip {
-    font-size: 12px; border-radius: 20px; padding: 7px 15px; cursor: pointer; transition: all 0.12s;
-  }
+  .chip { font-size: 12px; border-radius: 20px; padding: 7px 15px; cursor: pointer; transition: all 0.12s; }
   .chip-orange { background: var(--accent-light); color: var(--accent); border: 0.5px solid rgba(196,98,26,0.2); }
   .chip-gold { background: var(--gold-light); color: #8A6E10; border: 0.5px solid rgba(196,154,40,0.25); }
   .chip-orange:hover { background: #F5D8B8; }
@@ -188,17 +97,11 @@
   .msg { display: flex; gap: 10px; animation: fadeUp 0.2s ease; }
   .msg.user { flex-direction: row-reverse; }
   @keyframes fadeUp { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
-
-  .avatar {
-    width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center; font-weight: 500;
-  }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: 500; }
   .avatar.chef { background: var(--accent); color: white; font-family: 'Cormorant Garamond', serif; font-size: 15px; font-style: italic; }
   .avatar.user-av { background: var(--accent-light); color: var(--accent); font-size: 11px; }
-
   .msg-wrap { display: flex; flex-direction: column; align-items: flex-start; max-width: 74%; }
   .msg.user .msg-wrap { align-items: flex-end; }
-
   .bubble { padding: 11px 15px; border-radius: 14px; font-size: 14px; line-height: 1.65; border: 0.5px solid var(--border); }
   .msg.assistant .bubble { background: var(--surface); border-radius: 4px 14px 14px 14px; }
   .msg.user .bubble { background: var(--accent); color: white; border-color: transparent; border-radius: 14px 4px 14px 14px; font-size: 13px; }
@@ -207,13 +110,7 @@
   .bubble ul, .bubble ol { padding-left: 18px; margin: 6px 0; }
   .bubble li { margin: 3px 0; }
   .bubble p + p { margin-top: 8px; }
-
-  .save-btn {
-    margin-top: 6px; font-family: 'DM Sans', sans-serif; font-size: 11px;
-    background: none; border: 0.5px solid var(--border);
-    border-radius: 20px; padding: 4px 12px; color: var(--muted);
-    cursor: pointer; transition: all 0.12s;
-  }
+  .save-btn { margin-top: 6px; font-family: 'DM Sans', sans-serif; font-size: 11px; background: none; border: 0.5px solid var(--border); border-radius: 20px; padding: 4px 12px; color: var(--muted); cursor: pointer; transition: all 0.12s; }
   .save-btn:hover { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
   .save-btn.saved { color: #5A8A2A; border-color: #5A8A2A; }
 
@@ -223,28 +120,14 @@
   .dot:nth-child(3) { animation-delay: 0.4s; }
   @keyframes pulse { 0%,80%,100%{opacity:0.3} 40%{opacity:1} }
 
-  .input-area {
-    padding: 12px 16px; border-top: 0.5px solid var(--border);
-    display: flex; gap: 8px; align-items: flex-end; flex-shrink: 0;
-  }
-  textarea {
-    flex: 1; font-family: 'DM Sans', sans-serif; font-size: 14px;
-    background: var(--surface); border: 0.5px solid var(--border);
-    border-radius: 12px; padding: 10px 14px; resize: none; outline: none;
-    color: var(--ink); max-height: 130px; line-height: 1.5; transition: border-color 0.15s;
-  }
+  .input-area { padding: 12px 16px; border-top: 0.5px solid var(--border); display: flex; gap: 8px; align-items: flex-end; flex-shrink: 0; }
+  textarea { flex: 1; font-family: 'DM Sans', sans-serif; font-size: 14px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 10px 14px; resize: none; outline: none; color: var(--ink); max-height: 130px; line-height: 1.5; transition: border-color 0.15s; }
   textarea:focus { border-color: var(--accent); }
   textarea::placeholder { color: var(--muted); }
-  .send-btn {
-    width: 40px; height: 40px; background: var(--accent);
-    border: none; border-radius: 10px; color: white;
-    font-size: 16px; cursor: pointer; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center; transition: background 0.15s;
-  }
+  .send-btn { width: 40px; height: 40px; background: var(--accent); border: none; border-radius: 10px; color: white; font-size: 16px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
   .send-btn:hover { background: var(--accent-hover); }
   .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-  /* PLANNER */
   .scroll-panel { flex: 1; overflow-y: auto; }
   .panel-inner { padding: 24px; }
   .panel-inner h2 { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 500; margin-bottom: 4px; color: var(--ink); }
@@ -259,26 +142,15 @@
   .meal-slot.empty { color: var(--muted); font-style: italic; cursor: default; }
   .meal-slot.empty:hover { color: var(--muted); }
   .panel-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  .action-btn {
-    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
-    background: var(--accent); color: white; border: none;
-    border-radius: 10px; padding: 10px 20px; cursor: pointer; transition: background 0.15s;
-  }
+  .action-btn { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; background: var(--accent); color: white; border: none; border-radius: 10px; padding: 10px 20px; cursor: pointer; transition: background 0.15s; }
   .action-btn:hover { background: var(--accent-hover); }
   .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-  .action-btn.secondary {
-    background: none; color: var(--accent);
-    border: 0.5px solid var(--accent);
-  }
+  .action-btn.secondary { background: none; color: var(--accent); border: 0.5px solid var(--accent); }
   .action-btn.secondary:hover { background: var(--accent-light); }
   .plan-note { font-size: 12px; color: var(--muted); font-style: italic; }
 
-  /* MY RECIPES */
   .recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin-bottom: 20px; }
-  .recipe-card {
-    background: var(--surface); border: 0.5px solid var(--border);
-    border-radius: 12px; padding: 14px 16px; cursor: pointer; transition: all 0.15s;
-  }
+  .recipe-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 14px 16px; cursor: pointer; transition: all 0.15s; }
   .recipe-card:hover { border-color: var(--accent); background: #FFFAF5; }
   .recipe-card h4 { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
   .recipe-card .rc-cuisine { font-size: 11px; color: var(--gold); margin-bottom: 6px; }
@@ -288,73 +160,34 @@
   .rc-delete { font-size: 11px; color: var(--muted); cursor: pointer; background: none; border: none; font-family: 'DM Sans', sans-serif; }
   .rc-delete:hover { color: #C43030; }
   .no-recipes { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 14px; font-style: italic; }
-
-  .add-recipe-form {
-    background: var(--surface); border: 0.5px solid var(--border);
-    border-radius: 14px; padding: 20px; margin-bottom: 20px;
-  }
+  .add-recipe-form { background: var(--surface); border: 0.5px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 20px; }
   .add-recipe-form h3 { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 500; color: var(--ink); margin-bottom: 14px; }
   .form-row { display: flex; gap: 10px; margin-bottom: 10px; }
   .form-field { display: flex; flex-direction: column; gap: 4px; flex: 1; }
   .form-field label { font-size: 11px; font-weight: 500; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; }
-  .form-field input, .form-field textarea, .form-field select {
-    font-family: 'DM Sans', sans-serif; font-size: 13px;
-    background: var(--bg); border: 0.5px solid var(--border);
-    border-radius: 8px; padding: 8px 10px; outline: none; color: var(--ink);
-    transition: border-color 0.15s; resize: vertical;
-  }
-  .form-field input:focus, .form-field textarea:focus, .form-field select:focus { border-color: var(--accent); }
+  .form-field input, .form-field textarea { font-family: 'DM Sans', sans-serif; font-size: 13px; background: var(--bg); border: 0.5px solid var(--border); border-radius: 8px; padding: 8px 10px; outline: none; color: var(--ink); transition: border-color 0.15s; resize: vertical; }
+  .form-field input:focus, .form-field textarea:focus { border-color: var(--accent); }
   .form-actions { display: flex; gap: 8px; margin-top: 12px; }
 
-  /* MY PROFILE */
   .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
-  .profile-card {
-    background: var(--surface); border: 0.5px solid var(--border);
-    border-radius: 12px; padding: 18px;
-  }
+  .profile-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 18px; }
   .profile-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
   .profile-card .pc-desc { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
-  .profile-card textarea, .profile-card input, .profile-card select {
-    width: 100%; font-family: 'DM Sans', sans-serif; font-size: 13px;
-    background: var(--bg); border: 0.5px solid var(--border);
-    border-radius: 8px; padding: 8px 10px; outline: none; color: var(--ink);
-    transition: border-color 0.15s; resize: vertical;
-  }
-  .profile-card textarea:focus, .profile-card input:focus, .profile-card select:focus { border-color: var(--accent); }
+  .profile-card textarea, .profile-card input { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 13px; background: var(--bg); border: 0.5px solid var(--border); border-radius: 8px; padding: 8px 10px; outline: none; color: var(--ink); transition: border-color 0.15s; resize: vertical; }
+  .profile-card textarea:focus, .profile-card input:focus { border-color: var(--accent); }
   .skill-btns { display: flex; gap: 6px; flex-wrap: wrap; }
-  .skill-btn {
-    font-family: 'DM Sans', sans-serif; font-size: 12px;
-    background: var(--bg); border: 0.5px solid var(--border);
-    border-radius: 20px; padding: 5px 14px; cursor: pointer; color: var(--muted);
-    transition: all 0.12s;
-  }
+  .skill-btn { font-family: 'DM Sans', sans-serif; font-size: 12px; background: var(--bg); border: 0.5px solid var(--border); border-radius: 20px; padding: 5px 14px; cursor: pointer; color: var(--muted); transition: all 0.12s; }
   .skill-btn.active { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
-
-  .upload-zone {
-    border: 1px dashed rgba(196,98,26,0.3); border-radius: 12px;
-    padding: 24px; text-align: center; cursor: pointer;
-    transition: all 0.15s; background: var(--bg); margin-bottom: 12px;
-  }
-  .upload-zone:hover { border-color: var(--accent); background: var(--accent-light); }
-  .upload-zone.dragover { border-color: var(--accent); background: var(--accent-light); }
+  .upload-zone { border: 1px dashed rgba(196,98,26,0.3); border-radius: 12px; padding: 24px; text-align: center; cursor: pointer; transition: all 0.15s; background: var(--bg); margin-bottom: 12px; }
+  .upload-zone:hover, .upload-zone.dragover { border-color: var(--accent); background: var(--accent-light); }
   .upload-icon { font-size: 28px; margin-bottom: 8px; }
   .upload-zone p { font-size: 13px; color: var(--muted); line-height: 1.6; }
   .upload-zone strong { color: var(--accent); }
-  .uploaded-doc {
-    display: flex; align-items: center; justify-content: space-between;
-    background: var(--accent-light); border-radius: 8px; padding: 8px 12px;
-    font-size: 12px; color: var(--accent); margin-bottom: 8px;
-  }
+  .uploaded-doc { display: flex; align-items: center; justify-content: space-between; background: var(--accent-light); border-radius: 8px; padding: 8px 12px; font-size: 12px; color: var(--accent); margin-bottom: 8px; }
   .uploaded-doc button { background: none; border: none; color: var(--accent); cursor: pointer; font-size: 14px; opacity: 0.6; }
   .uploaded-doc button:hover { opacity: 1; }
-  .profile-save-bar {
-    display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px;
-    padding-top: 16px; border-top: 0.5px solid var(--gold-border);
-  }
-  .profile-full-card {
-    background: var(--surface); border: 0.5px solid var(--border);
-    border-radius: 12px; padding: 18px; margin-bottom: 16px; grid-column: 1 / -1;
-  }
+  .profile-save-bar { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; padding-top: 16px; border-top: 0.5px solid var(--gold-border); }
+  .profile-full-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 16px; grid-column: 1 / -1; }
 
   @media (max-width: 800px) {
     .sidebar { display: none; }
@@ -365,27 +198,25 @@
 </head>
 <body>
 
-<!-- API KEY SCREEN -->
 <div id="apiScreen">
   <div class="api-card">
     <div class="logo">Pumpkin <span>Spice</span></div>
-    <div class="free-badge">✦ Free to use — no credit card needed</div>
-    <p>Powered by Google Gemini. Get your free API key in about a minute:</p>
+    <div class="cost-badge">✦ Powered by Anthropic Claude</div>
+    <p>Enter your Anthropic API key to get started. Your key is stored only in your browser and sent directly to Anthropic — never anywhere else.</p>
     <div class="steps">
-      <div class="steps-label">How to get your free key</div>
+      <div class="steps-label">How to get your key</div>
       <ol>
-        <li>Go to <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a></li>
-        <li>Sign in with your Google account</li>
-        <li>Click <strong>Create API Key</strong> and copy it</li>
-        <li>Paste it below and you're in</li>
+        <li>Go to <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></li>
+        <li>Sign up and add $5 in credits (lasts months with casual use)</li>
+        <li>Click <strong>API Keys → Create Key</strong> and copy it</li>
+        <li>Paste it below</li>
       </ol>
     </div>
-    <input type="password" id="apiKeyInput" placeholder="Paste your Gemini API key here..." />
+    <input type="password" id="apiKeyInput" placeholder="sk-ant-..." />
     <button class="primary-btn" onclick="saveKey()">Enter the Kitchen →</button>
   </div>
 </div>
 
-<!-- APP -->
 <header>
   <div class="logo">Pumpkin <span>Spice</span> <span class="logo-gold">✦</span></div>
   <div class="header-right">
@@ -433,7 +264,6 @@
       <button class="mode-tab" id="tab-profile" onclick="switchTab('profile')">My Profile</button>
     </div>
 
-    <!-- CHAT PANEL -->
     <div class="panel active" id="panel-chat">
       <div class="chat-area" id="chatArea">
         <div class="welcome" id="welcomeMsg">
@@ -455,7 +285,6 @@
       </div>
     </div>
 
-    <!-- PLANNER PANEL -->
     <div class="panel" id="panel-planner">
       <div class="scroll-panel">
         <div class="panel-inner">
@@ -465,20 +294,18 @@
           <div class="week-grid" id="weekGrid"></div>
           <div class="panel-actions">
             <button class="action-btn" id="genPlanBtn" onclick="generatePlan()">Generate AI Meal Plan</button>
-            <span class="plan-note">Tailored to your profile & preferences</span>
+            <span class="plan-note">Tailored to your profile &amp; preferences</span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- MY RECIPES PANEL -->
     <div class="panel" id="panel-recipes">
       <div class="scroll-panel">
         <div class="panel-inner">
           <h2>My Recipes</h2>
           <p class="sub">Your personal recipe catalogue. Click any recipe to discuss it in chat.</p>
           <div class="gold-rule"></div>
-
           <div class="add-recipe-form" id="addRecipeForm" style="display:none;">
             <h3>Add a Recipe</h3>
             <div class="form-row">
@@ -508,29 +335,25 @@
               <button class="action-btn secondary" onclick="document.getElementById('addRecipeForm').style.display='none'">Cancel</button>
             </div>
           </div>
-
           <div class="panel-actions" style="margin-bottom:20px;">
-            <button class="action-btn" onclick="document.getElementById('addRecipeForm').style.display='block'; document.getElementById('rName').focus()">+ Add Recipe</button>
+            <button class="action-btn" onclick="document.getElementById('addRecipeForm').style.display='block';document.getElementById('rName').focus()">+ Add Recipe</button>
             <button class="action-btn secondary" onclick="quickAsk('Based on my saved recipes and profile, suggest what I should cook this week')">Ask AI for suggestions</button>
           </div>
-
           <div class="recipe-grid" id="recipeGrid"></div>
         </div>
       </div>
     </div>
 
-    <!-- MY PROFILE PANEL -->
     <div class="panel" id="panel-profile">
       <div class="scroll-panel">
         <div class="panel-inner">
           <h2>My Profile</h2>
           <p class="sub">Everything here is automatically shared with the AI in every conversation.</p>
           <div class="gold-rule"></div>
-
           <div class="profile-grid">
             <div class="profile-card">
-              <h3>Allergies & Restrictions</h3>
-              <p class="pc-desc">List anything the AI should always avoid.</p>
+              <h3>Allergies &amp; Restrictions</h3>
+              <p class="pc-desc">The AI will never suggest these.</p>
               <textarea id="pAllergies" rows="4" placeholder="e.g. shellfish, tree nuts, lactose, gluten..."></textarea>
             </div>
             <div class="profile-card">
@@ -556,35 +379,32 @@
             <div class="profile-card">
               <h3>Flavour Profile</h3>
               <p class="pc-desc">What tastes do you love or avoid?</p>
-              <textarea id="pFlavour" rows="4" placeholder="e.g. love umami and spice, dislike overly sweet, prefer rich and savoury..."></textarea>
+              <textarea id="pFlavour" rows="4" placeholder="e.g. love umami and spice, dislike overly sweet..."></textarea>
             </div>
             <div class="profile-card">
               <h3>Cooking Goals</h3>
               <p class="pc-desc">What are you working towards?</p>
-              <textarea id="pGoals" rows="4" placeholder="e.g. learn French techniques, eat healthier, impress dinner guests, reduce meat..."></textarea>
+              <textarea id="pGoals" rows="4" placeholder="e.g. learn French techniques, eat healthier, impress dinner guests..."></textarea>
             </div>
-
             <div class="profile-full-card">
               <h3 style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;margin-bottom:4px;">Upload a Preferences Document</h3>
-              <p class="pc-desc">Upload a .txt or .pdf file with detailed preferences, dietary notes, or anything you want the AI to know permanently. The contents will be read and stored.</p>
+              <p class="pc-desc">Upload a .txt file with detailed preferences, dietary notes, or anything you want the AI to know permanently.</p>
               <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
                 <div class="upload-icon">📄</div>
-                <p><strong>Click to upload</strong> or drag and drop a file here<br/><span style="font-size:12px;">Supports .txt files</span></p>
+                <p><strong>Click to upload</strong> or drag and drop<br/><span style="font-size:12px;">Supports .txt files</span></p>
               </div>
               <input type="file" id="fileInput" accept=".txt" style="display:none;" onchange="handleFileSelect(event)" />
               <div id="uploadedDocs"></div>
             </div>
-
             <div class="profile-full-card" style="border-color:var(--gold-border);">
               <h3 style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;margin-bottom:4px;color:var(--gold);">✦ Additional Notes</h3>
-              <p class="pc-desc">Anything else you want the AI to always know — cooking philosophy, cultural preferences, people you cook for, special occasions, etc.</p>
-              <textarea id="pNotes" rows="5" placeholder="e.g. I cook for my family of 4, two kids under 10 who are picky eaters. I love hosting dinner parties on weekends. My partner is vegetarian..."></textarea>
+              <p class="pc-desc">Anything else — who you cook for, occasions, philosophy, cultural preferences.</p>
+              <textarea id="pNotes" rows="5" placeholder="e.g. I cook for a family of 4 with two picky kids. I love hosting dinner parties. My partner is vegetarian..."></textarea>
             </div>
           </div>
-
           <div class="profile-save-bar">
             <button class="action-btn secondary" onclick="loadProfile()">Revert</button>
-            <button class="action-btn" onclick="saveProfile()">Save Profile</button>
+            <button class="action-btn" id="saveProfileBtn" onclick="saveProfile()">Save Profile</button>
           </div>
         </div>
       </div>
@@ -595,9 +415,9 @@
 <script>
 const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const MEALS = ['Breakfast','Lunch','Dinner'];
-const MODEL = 'gemini-2.0-flash';
+const MODEL = 'claude-sonnet-4-20250514';
 
-let apiKey = localStorage.getItem('ps_gemini_key') || '';
+let apiKey = localStorage.getItem('ps_anthropic_key') || '';
 let messages = [];
 let quickPrefs = JSON.parse(localStorage.getItem('ps_prefs') || '[]');
 let savedRecipeNames = JSON.parse(localStorage.getItem('ps_saved_names') || '[]');
@@ -615,13 +435,13 @@ function init() {
 
 function saveKey() {
   const val = document.getElementById('apiKeyInput').value.trim();
-  if (!val) { alert('Please paste your Gemini API key.'); return; }
+  if (!val) { alert('Please paste your Anthropic API key.'); return; }
   apiKey = val;
-  localStorage.setItem('ps_gemini_key', apiKey);
+  localStorage.setItem('ps_anthropic_key', apiKey);
   document.getElementById('apiScreen').style.display = 'none';
 }
 function changeKey() {
-  localStorage.removeItem('ps_gemini_key'); apiKey = '';
+  localStorage.removeItem('ps_anthropic_key'); apiKey = '';
   document.getElementById('apiKeyInput').value = '';
   document.getElementById('apiScreen').style.display = 'flex';
 }
@@ -644,36 +464,42 @@ function buildSystemPrompt() {
   const p = getProfile();
   const qp = quickPrefs.length ? quickPrefs.join(', ') : '';
   const recipes = myRecipes.length ? myRecipes.map(r => r.name + (r.cuisine ? ` (${r.cuisine})` : '')).join(', ') : '';
-
   let prompt = `You are Pumpkin Spice, a warm, expert, and passionate AI culinary assistant with the knowledge of a classically trained chef. You help with everything from quick weeknight dinners to elaborate fine dining at home.\n\n`;
-
-  if (p.allergies) prompt += `ALLERGIES & RESTRICTIONS (never include these): ${p.allergies}\n`;
+  if (p.allergies) prompt += `ALLERGIES & RESTRICTIONS — never include these under any circumstances: ${p.allergies}\n`;
   if (p.cuisines) prompt += `Favourite cuisines: ${p.cuisines}\n`;
   if (p.skill) prompt += `Cooking skill level: ${p.skill}\n`;
-  if (p.equipment) prompt += `Kitchen equipment available: ${p.equipment}\n`;
+  if (p.equipment) prompt += `Kitchen equipment: ${p.equipment}\n`;
   if (p.flavour) prompt += `Flavour profile: ${p.flavour}\n`;
   if (p.goals) prompt += `Cooking goals: ${p.goals}\n`;
   if (p.notes) prompt += `Additional context: ${p.notes}\n`;
-  if (qp) prompt += `Quick preference notes: ${qp}\n`;
-  if (recipes) prompt += `User's saved recipes: ${recipes}\n`;
+  if (qp) prompt += `Quick notes: ${qp}\n`;
+  if (recipes) prompt += `User's recipe catalogue: ${recipes}\n`;
   if (p.doc) prompt += `\nDetailed preferences from uploaded document:\n${p.doc}\n`;
-
-  prompt += `\nGuidelines:\n- Always respect all allergies and restrictions absolutely\n- Tailor every response to the user's skill level, equipment, and preferences\n- Format recipes with ### Recipe Name, then ingredients, then numbered steps\n- Be warm, encouraging, and genuinely passionate about food\n- When providing a complete recipe, end with [SAVE: Recipe Name]\n- For fine dining requests: include plating tips, wine pairings, professional techniques\n- Reference the user's preferences naturally`;
-
+  prompt += `\nGuidelines:\n- Always respect allergies and restrictions absolutely\n- Tailor every response to the user's skill level, equipment, and preferences\n- Format recipes with ### Recipe Name, then ingredients, then numbered steps\n- Be warm, encouraging, and genuinely passionate about food\n- When providing a complete recipe, end with [SAVE: Recipe Name]\n- For fine dining requests: include plating tips, wine pairings, professional techniques`;
   return prompt;
 }
 
-async function callGemini(userMsg, jsonMode) {
-  const history = messages.map(m => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] }));
+async function callAnthropic(userMsg, jsonMode) {
+  const history = messages.map(m => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: m.content }));
   const body = {
-    system_instruction: { parts: [{ text: buildSystemPrompt() }] },
-    contents: [...history, { role: 'user', parts: [{ text: userMsg }] }],
-    generationConfig: { maxOutputTokens: 1500, temperature: 0.8, ...(jsonMode ? { responseMimeType: 'application/json' } : {}) }
+    model: MODEL,
+    max_tokens: 1500,
+    system: buildSystemPrompt(),
+    messages: [...history, { role: 'user', content: userMsg }]
   };
-  const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-calls': 'true'
+    },
+    body: JSON.stringify(body)
+  });
   if (!resp.ok) { const err = await resp.json().catch(() => ({})); throw new Error(err.error?.message || `API error ${resp.status}`); }
   const data = await resp.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  return data.content?.[0]?.text || '';
 }
 
 function renderPrefs() {
@@ -754,7 +580,7 @@ async function sendMessage() {
   messages.push({ role: 'user', content: text });
   addMessage('user', text); showTyping();
   try {
-    const reply = await callGemini(text, false);
+    const reply = await callAnthropic(text, false);
     const saveMatch = reply.match(/\[SAVE: ([^\]]+)\]/);
     if (saveMatch) saveRecipeName(saveMatch[1]);
     messages.push({ role: 'assistant', content: reply });
@@ -804,11 +630,11 @@ async function generatePlan() {
   const btn = document.getElementById('genPlanBtn'); btn.disabled = true; btn.textContent = 'Generating...';
   try {
     const p = getProfile();
-    const prompt = `Create a 7-day meal plan with breakfast, lunch, and dinner. ${p.allergies ? 'NEVER include: ' + p.allergies + '.' : ''} Favourite cuisines: ${p.cuisines || 'varied'}. Skill level: ${p.skill || 'home cook'}. Return ONLY valid JSON, no markdown. Format: {"Mon":{"Breakfast":"name","Lunch":"name","Dinner":"name"},...} for Mon-Sun. Short dish names, 3-5 words.`;
-    const text = await callGemini(prompt, true);
-    mealPlan = JSON.parse(text.replace(/```json|```/g, '').trim());
-    localStorage.setItem('ps_plan', JSON.stringify(mealPlan));
-    buildWeekGrid();
+    const prompt = `Create a 7-day meal plan with breakfast, lunch, and dinner. ${p.allergies ? 'NEVER include: ' + p.allergies + '.' : ''} Favourite cuisines: ${p.cuisines || 'varied'}. Skill level: ${p.skill || 'home cook'}. Respond with ONLY a valid JSON object, no explanation or markdown. Format exactly: {"Mon":{"Breakfast":"dish name","Lunch":"dish name","Dinner":"dish name"},"Tue":{...},...} for Mon through Sun. Keep dish names short, 3-5 words.`;
+    const text = await callAnthropic(prompt, true);
+    const clean = text.replace(/```json|```/g, '').trim();
+    const jsonMatch = clean.match(/\{[\s\S]*\}/);
+    if (jsonMatch) { mealPlan = JSON.parse(jsonMatch[0]); localStorage.setItem('ps_plan', JSON.stringify(mealPlan)); buildWeekGrid(); }
   } catch(e) { alert('Could not generate plan. Please try again.'); }
   btn.disabled = false; btn.textContent = 'Regenerate Plan';
 }
@@ -864,33 +690,24 @@ function saveProfile() {
   localStorage.setItem('ps_goals', document.getElementById('pGoals').value);
   localStorage.setItem('ps_notes', document.getElementById('pNotes').value);
   localStorage.setItem('ps_skill', skillLevel);
-  const btn = document.querySelector('.profile-save-bar .action-btn');
+  const btn = document.getElementById('saveProfileBtn');
   btn.textContent = '✓ Saved!'; btn.style.background = '#5A8A2A';
   setTimeout(() => { btn.textContent = 'Save Profile'; btn.style.background = ''; }, 2000);
 }
 
 function setSkill(level) { skillLevel = level; renderSkillBtns(); }
-
-function renderSkillBtns() {
-  document.querySelectorAll('.skill-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.textContent === skillLevel);
-  });
-}
+function renderSkillBtns() { document.querySelectorAll('.skill-btn').forEach(btn => { btn.classList.toggle('active', btn.textContent === skillLevel); }); }
 
 function handleFileSelect(e) { const file = e.target.files[0]; if (file) readFile(file); }
 function handleDragOver(e) { e.preventDefault(); document.getElementById('uploadZone').classList.add('dragover'); }
-function handleDragLeave(e) { document.getElementById('uploadZone').classList.remove('dragover'); }
-function handleDrop(e) {
-  e.preventDefault(); document.getElementById('uploadZone').classList.remove('dragover');
-  const file = e.dataTransfer.files[0]; if (file) readFile(file);
-}
+function handleDragLeave() { document.getElementById('uploadZone').classList.remove('dragover'); }
+function handleDrop(e) { e.preventDefault(); document.getElementById('uploadZone').classList.remove('dragover'); const file = e.dataTransfer.files[0]; if (file) readFile(file); }
 
 function readFile(file) {
   if (!file.name.endsWith('.txt')) { alert('Please upload a .txt file.'); return; }
   const reader = new FileReader();
   reader.onload = (e) => {
-    uploadedDocContent = e.target.result;
-    uploadedDocName = file.name;
+    uploadedDocContent = e.target.result; uploadedDocName = file.name;
     localStorage.setItem('ps_doc_content', uploadedDocContent);
     localStorage.setItem('ps_doc_name', uploadedDocName);
     renderUploadedDocs();
